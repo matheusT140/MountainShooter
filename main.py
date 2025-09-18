@@ -1,7 +1,7 @@
 import pygame
 
-print('Setup start')
 pygame.init()
+print('Setup start')
 screen = pygame.display.set_mode(size=(800, 600))
 print('Setup end')
 
