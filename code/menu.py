@@ -4,7 +4,7 @@ import pygame.image
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import W_WIDTH, COLOR_ORANGE, COLOR_WHITE, MENU_OPTION
+from code.Const import W_WIDTH, COLOR_ORANGE, COLOR_WHITE, COLOR_YELLOW, MENU_OPTION
 
 
 class Menu:
@@ -14,22 +14,41 @@ class Menu:
         self.rect = self.surf.get_rect() # por padrão a posição é: left =0, top=0
 
     def run(self):
+        menu_option = 0
         pygame.mixer_music.load('./asset/Menu.mp3') # Essa linha deve ficar fora de um looping
         pygame.mixer_music.play(-1)  # Parametro -1 para a música tocar em looping. Essa linha deve ficar fora de um looping
         while True:
+            #Draw images
             self.window.blit(self.surf, self.rect)
             self.menu_text(text_size=50, text="Mountain", text_color=COLOR_ORANGE, text_center_pos=((W_WIDTH / 2), 70))
             self.menu_text(text_size=50, text="Shooter", text_color=COLOR_ORANGE, text_center_pos=((W_WIDTH / 2), 120))
 
             for i in range(len(MENU_OPTION)):
-                self.menu_text(text_size=20, text=MENU_OPTION[i], text_color=COLOR_WHITE, text_center_pos=((W_WIDTH / 2), 200 + (25 * i )))
-
-
+                if menu_option == i:
+                    self.menu_text(text_size=20, text=MENU_OPTION[i], text_color=COLOR_YELLOW, text_center_pos=((W_WIDTH / 2), 200 + (25 * i)))
+                else:
+                    self.menu_text(text_size=20, text=MENU_OPTION[i], text_color=COLOR_WHITE, text_center_pos=((W_WIDTH / 2), 200 + (25 * i)))
             pygame.display.flip()
+
+            # check the events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()  # close screen
                     quit()  # end pygame
+                if event.type == pygame.KEYDOWN: # identifica se uma tecla foi pressionada
+                    if event.key == pygame.K_DOWN: # identifica se a tecla foi a "seta para baixo"
+                        if menu_option < len(MENU_OPTION) - 1:
+                            menu_option += 1
+                        else:
+                            menu_option = 0
+                    if event.key == pygame.K_UP: # identifica se a tecla foi a "seta para baixo"
+                        if menu_option > 0:
+                            menu_option -= 1
+                        else:
+                            menu_option = 4
+                    if event.key == pygame.K_RETURN:
+                        return MENU_OPTION[menu_option]
+
     def menu_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
