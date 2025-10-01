@@ -3,8 +3,8 @@
 import pygame
 
 from code.Const import W_WIDTH, W_HEIGHT, MENU_OPTION
-from code.menu import Menu
-from code.level import Level
+from code.Menu import Menu
+from code.Level import Level
 
 class Game:
     def __init__(self):
