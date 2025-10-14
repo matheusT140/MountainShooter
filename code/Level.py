@@ -5,7 +5,7 @@ import sys
 import pygame.display
 from pygame import Surface, Rect
 from pygame.font import Font
-from code.Const import COLOR_WHITE, W_HEIGHT, MENU_OPTION, EVENT_ENEMY, SPAWN_TIME
+from code.Const import C_WHITE, W_HEIGHT, MENU_OPTION, EVENT_ENEMY, SPAWN_TIME, C_GREEN, C_CYAN
 from code.Enemy import Enemy
 from code.EntityFactory import EntityFactory
 from code.Entity import Entity
@@ -26,7 +26,7 @@ class Level:
         if game_mode in [MENU_OPTION[1], MENU_OPTION[2]]:
             self.entity_list.append(EntityFactory.get_entity('Player2'))
 
-        pygame.time.set_timer(EVENT_ENEMY, SPAWN_TIME)
+        pygame.time.set_timer(EVENT_ENEMY, SPAWN_TIME) #usar esse trecho para criar uma case nova periodicamente
 
     def run(self):
         pygame.mixer_music.load(f'./asset/{self.name}.mp3')
@@ -41,6 +41,12 @@ class Level:
                     shoot = ent.shoot()
                     if shoot is not None:
                         self.entity_list.append(shoot)
+                                        #trecho abaixo para o score
+                if ent.name == 'Player1':
+                    self.level_text(14, f'Player1 - Health: {ent.health} | Score: {ent.score}', C_GREEN, (10, 25))
+                if ent.name == 'Player2':
+                    self.level_text(14, f'Player2 - Health: {ent.health} | Score: {ent.score}', C_CYAN, (10, 45))
+                                        #score
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -49,8 +55,10 @@ class Level:
                     choice = random.choice(('Enemy1', 'Enemy2'))
                     self.entity_list.append(EntityFactory.get_entity(choice))
 
-            self.level_text(14, f'fps: {clock.get_fps() :.0f}', COLOR_WHITE, (10, W_HEIGHT - 35))
-            self.level_text(14, f'entidades: {len(self.entity_list)}', COLOR_WHITE, (10, W_HEIGHT - 20))
+            self.level_text(14, f'{self.name} - Timeout: {self.timeout / #score e HUD
+                                                          1000:.1f}s', C_WHITE, (10, 5))
+            self.level_text(14, f'fps: {clock.get_fps() :.0f}', C_WHITE, (10, W_HEIGHT - 35))
+            self.level_text(14, f'entidades: {len(self.entity_list)}', C_WHITE, (10, W_HEIGHT - 20))
 
             pygame.display.flip()
             #Collisions verification
